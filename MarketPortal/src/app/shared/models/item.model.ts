@@ -1,0 +1,16 @@
+export interface Item {
+    uuid: string;
+    name: string;
+    brand: string;
+    package: string;
+    price_per_item: number;
+    price_per_quantity: number;
+    quantity_unit: string;
+    url: string;
+    image_url: string;
+    market_name: string;    
+    market_location: string;
+    market_logo: string;
+    created_at: string;
+    updated_at: string;
+}
