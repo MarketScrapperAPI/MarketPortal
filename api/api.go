@@ -7,6 +7,7 @@ import (
 	"github.com/MarketScrapperAPI/MarketPortal/clients"
 	"github.com/MarketScrapperAPI/MarketPortal/handlers"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type Api struct {
@@ -21,15 +22,27 @@ func New() *Api {
 		panic("ITEMAPI_HOST is not set")
 	}
 
+	itemAPIPort := os.Getenv("ITEMAPI_PORT")
+	log.Println("ITEMAPI_PORT: ", itemAPIPort)
+	if itemAPIPort == "" {
+		panic("ITEMAPI_PORT is not set")
+	}
+
 	e := echo.New()
 
-	// Clients
-	itemClient := clients.NewItemAPIClient(itemAPIHost)
+	// Middleware
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
-	// handlers
+	// Clients
+	itemClient := clients.NewItemAPIClient(itemAPIHost, itemAPIPort)
+
+	// Handlers
 	itemsHandler := handlers.NewItemsHandler(itemClient)
 
-	g := e.Group("/v1")
+	g := e.Group("/api/v1")
 
 	g.GET("/items", itemsHandler.GetItems)
 

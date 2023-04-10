@@ -14,3 +14,14 @@ export interface Item {
     created_at: string;
     updated_at: string;
 }
+
+export interface Pagination {
+    total_pages: number;
+    per_page: number;
+    page: number;
+}
+
+export interface ItemListResponse {
+    ListItemsResponse: Item[];
+    pagination: Pagination;
+}

@@ -1,17 +1,43 @@
+<mat-accordion class="example-headers-align" multi>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Market Items 
+        <span *ngIf="item_searched"> : {{item_searched}}</span>
+      </mat-panel-title>
+      <mat-panel-description>
+        Search for your items on different markets 
+        <mat-icon>shopping_cart</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Item name</mat-label>
+      <input matInput placeholder="Pizza" [(ngModel)]="item_searched">
+      <mat-icon matSuffix>shopping_basket</mat-icon>
+    </mat-form-field>
+
+    <button mat-icon-button matTooltip="Basic" aria-label="search_item" (click)="searchItem()">
+      <mat-icon>search</mat-icon>
+    </button>
+
+  </mat-expansion-panel>
+</mat-accordion>
+
   <mat-grid-list cols="4" rowHeight="1:1.1">
     <mat-grid-tile  *ngFor="let item of items">
-                <mat-card class="list-card mat-elevation-z4">
-                    <mat-card-header>
-                      <img mat-card-avatar src="https://pbs.twimg.com/profile_images/662588354836504577/XUFC6xGj_400x400.png" class="example-header-image">
-                      <mat-card-title>{{item.name}}</mat-card-title>
-                      <mat-card-subtitle>{{item.market_name}} {{item.market_location}}</mat-card-subtitle>
-                    </mat-card-header>
-                    <img mat-card-image class="item-image" src="{{item.image_url}}" alt="Photo of {{item.name}}">
-                    <mat-card-content>
-                        Price: {{item.price_per_item}} €
-                    </mat-card-content>
-                    <mat-card-actions>
-                    </mat-card-actions>
-                  </mat-card>
+      <mat-card class="list-card mat-elevation-z4">
+        <mat-card-header>
+          <img mat-card-avatar src="https://pbs.twimg.com/profile_images/662588354836504577/XUFC6xGj_400x400.png" class="example-header-image">
+          <mat-card-title>{{item.name}}</mat-card-title>
+          <mat-card-subtitle>{{item.market_name}} {{item.market_location}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image class="item-image" src="{{item.image_url}}" alt="Photo of {{item.name}}">
+        <mat-card-content>
+          {{item.price_per_item}} € <span>  </span>{{item.price_per_quantity}} €/{{item.quantity_unit}}
+        </mat-card-content>
+        <mat-card-actions>
+        </mat-card-actions>
+      </mat-card>
     </mat-grid-tile>
   </mat-grid-list>

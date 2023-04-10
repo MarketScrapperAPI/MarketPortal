@@ -1,37 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Item } from '../models/item.model';
+import { Observable, Subject } from 'rxjs';
+import { Item, ItemListResponse } from '../models/item.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
 
-  private apiUrl = 'http://localhost:3000/api/items';
+  private apiUrl = 'http://localhost:8080/api/v1/items';
 
-  private items: Item[] = [
-    {
-      uuid: '1',
-      name: 'Item 1',
-      brand: 'Brand 1',
-      package: 'Package 1',
-      price_per_item: 1,
-      price_per_quantity: 1,
-      quantity_unit: 'Unit 1',
-      url: 'Url 1',
-      image_url: 'Image Url 1',
-      market_name: 'Market Name 1',
-      market_location: 'Market Location 1',
-      market_logo: 'market_logo_1',
-      created_at: 'Created At 1',
-      updated_at: 'Updated At 1'
-    }
-  ];
+  private items: Item[] = [];
+  private itemsUpdated = new Subject<Item[]>();
 
-  getItems(): Observable<Item[]> {
-    return this.http.get<Item[]>(this.apiUrl);
+  getItemsUpdatedListener() {
+    return this.itemsUpdated.asObservable();
   }
+
+  getItems(queryParams:Map<string, string>) {
+    let url = this.apiUrl + '?'+ Array.from(queryParams.keys()).map(key => key + '=' + queryParams.get(key)).join('&');
+    console.log(url);
+    this.http.get<ItemListResponse>(url)
+    .subscribe((itemListResponse: ItemListResponse) => {
+      this.items = itemListResponse.ListItemsResponse;
+      this.itemsUpdated.next([...this.items]);
+    })
+  }
+
+
 
   constructor(private http: HttpClient) { }
 }

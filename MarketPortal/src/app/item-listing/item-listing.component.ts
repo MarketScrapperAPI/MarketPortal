@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Item } from '../shared/models/item.model';
 import { ItemService } from '../shared/services/item.service';
 
@@ -7,7 +8,7 @@ import { ItemService } from '../shared/services/item.service';
   templateUrl: './item-listing.component.html',
   styleUrls: ['./item-listing.component.css']
 })
-export class ItemListingComponent {
+export class ItemListingComponent implements OnInit, OnDestroy {
 
   mockedItems: Item[] = [
     {
@@ -108,14 +109,36 @@ export class ItemListingComponent {
     }
   ];
 
-  items: Item[] = this.mockedItems;
+  itemsSub: Subscription = new Subscription;
 
-  constructor(private itemService: ItemService) { }
+  item_searched: string = "";
+  items: Item[] = [];
+
+  constructor(private itemService: ItemService) {}
 
   ngOnInit() {
-    /*
-    this.itemService.getItems().subscribe(items => {
+    
+    let queryParams = new Map<string, string>([
+      ["name", "pipocas"],
+      ["pricePerItemGreaterThan", "0"]
+    ]);
+
+    this.itemService.getItems(queryParams);
+    this.itemsSub = this.itemService.getItemsUpdatedListener()
+    .subscribe((items: Item[]) => {
       this.items = items;
-    });*/
+    });
+  }
+
+  ngOnDestroy() {
+    this.itemsSub.unsubscribe();
+  }
+
+  public searchItem() {
+    let queryParams = new Map<string, string>([
+      ["name", this.item_searched],
+      ["pricePerItemGreaterThan", "0"]
+    ]);
+    this.itemService.getItems(queryParams)
   }
 }

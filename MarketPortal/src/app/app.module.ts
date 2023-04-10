@@ -8,6 +8,11 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCommonModule} from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSliderModule} from '@angular/material/slider';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     MatCardModule,
     BrowserAnimationsModule,
     MatListModule,
@@ -31,7 +37,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatCommonModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatExpansionModule,
+    MatSliderModule
   ],
   providers: [
     ItemService

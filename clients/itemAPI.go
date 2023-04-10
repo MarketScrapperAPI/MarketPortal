@@ -7,10 +7,10 @@ import (
 	"google.golang.org/grpc"
 )
 
-func NewItemAPIClient(apiUrl string) pb.ItemApiClient {
+func NewItemAPIClient(apiUrl string, apiPort string) pb.ItemApiClient {
 
 	var conn *grpc.ClientConn
-	conn, err := grpc.Dial(apiUrl+":50005", grpc.WithInsecure())
+	conn, err := grpc.Dial(apiUrl+":"+apiPort, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err)
 	}
