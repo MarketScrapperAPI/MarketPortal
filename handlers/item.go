@@ -60,6 +60,14 @@ func (h *ItemsHandler) GetItems(c echo.Context) error {
 		req.PricePerItemLowerThan = float32(pricePerItemLowerThan)
 	}
 
+	if c.QueryParam("sortBy") != "" {
+		req.SortBy = c.QueryParam("sortBy")
+	}
+
+	if c.QueryParam("sortOrder") != "" {
+		req.SortOrder = c.QueryParam("sortOrder")
+	}
+
 	rsp, err := h.itemAPIClient.ListItems(context.Background(), &req)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())

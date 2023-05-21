@@ -21,6 +21,20 @@
       <mat-icon>search</mat-icon>
     </button>
 
+    <mat-form-field>
+      <mat-label>Sort by</mat-label>
+      <mat-select [(value)]="sortBySelectedOption">
+        <mat-option *ngFor="let sortOption of sortByOptions" value={{sortOption.value}}>{{sortOption.viewValue}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Sort Order</mat-label>
+      <mat-select [(value)]="sortOrderSelectedOption">
+        <mat-option *ngFor="let sortOption of sortOrderOptions" value={{sortOption.value}}>{{sortOption.viewValue}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </mat-expansion-panel>
 </mat-accordion>
 
