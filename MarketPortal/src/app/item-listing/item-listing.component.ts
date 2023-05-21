@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Item } from '../shared/models/item.model';
+import { Item, ItemListResponse } from '../shared/models/item.model';
 import { ItemService } from '../shared/services/item.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-item-listing',
@@ -114,6 +115,11 @@ export class ItemListingComponent implements OnInit, OnDestroy {
   item_searched: string = "";
   items: Item[] = [];
 
+  itemPage: number = 1;
+  itemsPerPage: number = 10;
+  totalItems: number = 0;
+  pageSizeOptions = [5, 10, 25, 50, 100];
+
   constructor(private itemService: ItemService) {}
 
   ngOnInit() {
@@ -125,8 +131,10 @@ export class ItemListingComponent implements OnInit, OnDestroy {
 
     this.itemService.getItems(queryParams);
     this.itemsSub = this.itemService.getItemsUpdatedListener()
-    .subscribe((items: Item[]) => {
-      this.items = items;
+    .subscribe((itemsResponse: ItemListResponse) => {
+      this.items = itemsResponse.ListItemsResponse;
+      this.totalItems = itemsResponse.pagination.total_pages*itemsResponse.pagination.per_page;
+      console.log(itemsResponse)
     });
   }
 
@@ -135,10 +143,18 @@ export class ItemListingComponent implements OnInit, OnDestroy {
   }
 
   public searchItem() {
-    let queryParams = new Map<string, string>([
+    let queryParams = new Map<string, string | number>([
       ["name", this.item_searched],
-      ["pricePerItemGreaterThan", "0"]
+      ["pricePerItemGreaterThan", "0"],
+      ["page", this.itemPage],
+      ["perPage", this.itemsPerPage]
     ]);
     this.itemService.getItems(queryParams)
   }
+
+  pageChangeEvent(event: PageEvent) {
+    this.itemPage = event.pageIndex;
+    this.itemsPerPage = event.pageSize;
+    this.searchItem();
+}
 }

@@ -41,9 +41,19 @@ func New() *Api {
 
 	// Handlers
 	itemsHandler := handlers.NewItemsHandler(itemClient)
+	portalHandler := handlers.NewPortalHandler()
+
+	// middleware
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:  handlers.PortalHTMLPath,
+		Index: handlers.PortalHTMLPath + "index.html",
+		HTML5: true,
+	}))
+
+	// Routes
+	e.GET("/", portalHandler.GetPortal)
 
 	g := e.Group("/api/v1")
-
 	g.GET("/items", itemsHandler.GetItems)
 
 	return &Api{

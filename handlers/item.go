@@ -21,13 +21,21 @@ func NewItemsHandler(itemAPIClient pb.ItemApiClient) *ItemsHandler {
 
 func (h *ItemsHandler) GetItems(c echo.Context) error {
 
-	pag := pb.PaginationRequest{
-		Page:    1,
-		PerPage: 10,
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	perPage, err := strconv.Atoi(c.QueryParam("perPage"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
 	req := pb.ListItemsRequest{
-		Pagination: &pag,
+		Pagination: &pb.PaginationRequest{
+			Page:    int32(page),
+			PerPage: int32(perPage),
+		},
 	}
 
 	if c.QueryParam("name") != "" {

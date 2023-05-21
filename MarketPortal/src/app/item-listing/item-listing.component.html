@@ -25,6 +25,14 @@
 </mat-accordion>
 
   <mat-grid-list cols="4" rowHeight="1:1.1">
+    <mat-paginator #paginator
+    (page)="pageChangeEvent($event)"
+    [length]="totalItems"
+    [pageSize]="itemsPerPage"
+    [pageIndex]="itemPage"
+    [pageSizeOptions]="pageSizeOptions"
+    aria-label="Select page">
+</mat-paginator>
     <mat-grid-tile  *ngFor="let item of items">
       <mat-card class="list-card mat-elevation-z4">
         <mat-card-header>
